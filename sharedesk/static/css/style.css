@@ -1,0 +1,39 @@
+.clipboard-item .clipboard-text {
+  white-space: pre-wrap;
+  word-break: break-word;
+  max-height: 220px;
+  overflow-y: auto;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+#dropZone {
+  transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+  cursor: pointer;
+}
+
+#dropZone.dragover {
+  background-color: var(--bs-tertiary-bg);
+  border-color: var(--bs-primary) !important;
+}
+
+.table td, .table th {
+  vertical-align: middle;
+}
+
+#previewModalBody img,
+#previewModalBody video {
+  max-width: 100%;
+  max-height: 70vh;
+}
+
+#previewModalBody pre {
+  text-align: left;
+  max-height: 70vh;
+  overflow: auto;
+}
+
+#globalSearchResults .card {
+  max-height: 60vh;
+  overflow-y: auto;
+}

@@ -1,0 +1,17 @@
+[Unit]
+Description=ShareDesk - LAN clipboard and file sharing
+After=network.target
+
+[Service]
+Type=simple
+User=sharedesk
+Group=sharedesk
+WorkingDirectory=/opt/sharedesk
+Environment="SHAREDESK_HOST=0.0.0.0"
+Environment="SHAREDESK_PORT=8383"
+ExecStart=/opt/sharedesk/sharedesk-env/bin/gunicorn -w 2 -b 0.0.0.0:8383 app:app
+Restart=on-failure
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

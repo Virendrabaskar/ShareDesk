@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en" data-bs-theme="light">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ app_title }}{% block title %}{% endblock %}</title>
+  <meta name="csrf-token" content="{{ csrf_token() }}">
+  <meta name="app-theme" content="{{ theme }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-3">
+    <div class="container-fluid">
+      <a class="navbar-brand fw-semibold" href="{{ url_for('pages.clipboard_page') }}">
+        <i class="bi bi-clipboard-check"></i> {{ app_title }}
+      </a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navMain">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'clipboard' %}active{% endif %}" href="{{ url_for('pages.clipboard_page') }}">
+              <i class="bi bi-clipboard"></i> Clipboard
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'files' %}active{% endif %}" href="{{ url_for('pages.files_page') }}">
+              <i class="bi bi-folder2-open"></i> Files
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'settings' %}active{% endif %}" href="{{ url_for('pages.settings_page') }}">
+              <i class="bi bi-gear"></i> Settings
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if active == 'about' %}active{% endif %}" href="{{ url_for('pages.about_page') }}">
+              <i class="bi bi-info-circle"></i> About
+            </a>
+          </li>
+        </ul>
+        <div class="d-flex align-items-center gap-2">
+          <input type="search" id="globalSearch" class="form-control form-control-sm" placeholder="Search everything..." style="width: 220px;">
+          {% if enable_qr_code %}
+          <button type="button" id="qrBtn" class="btn btn-sm btn-outline-secondary" title="Show QR code">
+            <i class="bi bi-qr-code"></i>
+          </button>
+          {% endif %}
+          <button type="button" id="themeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle theme">
+            <i class="bi bi-circle-half"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid pb-5">
+    <div id="globalSearchResults" class="mb-3"></div>
+    {% block content %}{% endblock %}
+  </div>
+
+  <!-- Device name modal -->
+  <div class="modal fade" id="deviceNameModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-laptop"></i> Name this device</h5>
+        </div>
+        <div class="modal-body">
+          <p class="text-body-secondary">This name is shown next to items you save or upload from this device.</p>
+          <input type="text" id="deviceNameInput" class="form-control" placeholder="e.g. Office PC, iPhone, Laptop">
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="deviceNameSave" class="btn btn-primary">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR code modal -->
+  <div class="modal fade" id="qrModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Scan to open</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img src="{{ url_for('qrcode_api.get_qrcode') }}" alt="QR code" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container position-fixed bottom-0 end-0 p-3" id="toastContainer"></div>
+
+  <script src="{{ url_for('static', filename='vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

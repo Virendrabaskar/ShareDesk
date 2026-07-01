@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - ShareDesk</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="d-flex align-items-center justify-content-center vh-100 bg-body-tertiary">
+  <div class="card shadow-sm" style="width: 22rem;">
+    <div class="card-body">
+      <h4 class="card-title text-center mb-3"><i class="bi bi-clipboard-check"></i> ShareDesk</h4>
+      {% if error %}
+      <div class="alert alert-danger py-2">{{ error }}</div>
+      {% endif %}
+      <form method="post">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="mb-3">
+          <label class="form-label">Password</label>
+          <input type="password" name="password" class="form-control" autofocus required>
+        </div>
+        <button type="submit" class="btn btn-primary w-100">Unlock</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

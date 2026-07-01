@@ -1,0 +1,453 @@
+# ShareDesk - Product Requirements Specification (v1.0)
+
+## Overview
+
+ShareDesk is a lightweight, self-hosted web application that provides a shared clipboard and temporary file-sharing service for devices on the same local network.
+
+The application is designed for home servers and small offices where users frequently need to transfer text, links, code snippets, images, documents, and other files between computers, tablets, and phones without installing client applications.
+
+ShareDesk is browser-based, easy to deploy, and requires only Python and SQLite.
+
+---
+
+# Goals
+
+* Self-hosted
+* Browser-based
+* No client installation
+* LAN-first (not exposed to the Internet by default)
+* Simple deployment
+* Fast and lightweight
+* Mobile-friendly
+* Minimal dependencies
+* Python only
+* SQLite database
+* Responsive UI
+
+---
+
+# Non-Goals (Version 1)
+
+* Cloud synchronization
+* End-to-end encryption
+* User-to-user messaging
+* Real-time collaboration
+* Mobile applications
+* Desktop applications
+
+---
+
+# Target Users
+
+* Home server owners
+* Developers
+* Families
+* Small offices
+* Students
+* Anyone needing quick clipboard and file sharing across devices
+
+---
+
+# Technology Stack
+
+Backend
+
+* Python 3.10+
+* Flask
+* Gunicorn
+* SQLite
+* SQLAlchemy
+* Waitress (optional)
+* qrcode
+
+Frontend
+
+* HTML5
+* Bootstrap 5
+* Vanilla JavaScript
+* Bootstrap Icons
+
+No Docker required.
+
+No Node.js required.
+
+No build tools.
+
+---
+
+# Core Features
+
+## 1. Shared Clipboard
+
+A central clipboard accessible from any browser.
+
+Features
+
+* Save text
+* Copy text
+* Edit text
+* Delete text
+* Pin important items
+* Search clipboard history
+* Copy to system clipboard using Clipboard API
+* Display creation timestamp
+* Display device name
+
+Supported Content
+
+* Plain text
+* URLs
+* Code
+* JSON
+* XML
+* Markdown
+* SQL queries
+* Terminal commands
+
+Clipboard history should be ordered newest first.
+
+---
+
+## 2. Clipboard History
+
+Each saved clipboard entry stores:
+
+* Unique ID
+* Text content
+* Device name
+* Created timestamp
+* Updated timestamp
+* Pinned status
+* Expiration date (optional)
+
+Actions
+
+* Copy
+* Edit
+* Delete
+* Pin/Unpin
+
+---
+
+## 3. File Sharing
+
+Users can upload files from any browser.
+
+Supported Features
+
+* Drag & Drop upload
+* File picker
+* Multiple file upload
+* Download
+* Delete
+* Rename
+* Search files
+* Copy download link
+* Preview supported file types
+
+Supported Preview Types
+
+* Images
+* PDF
+* Text
+* Audio
+* Video
+* Markdown
+
+All other file types are downloadable.
+
+---
+
+## 4. Recent Files
+
+Display:
+
+* File name
+* File size
+* Uploaded by
+* Upload time
+* Download count (optional)
+
+Actions
+
+* Download
+* Copy Link
+* Delete
+* Rename
+
+---
+
+## 5. QR Code
+
+Generate a QR code pointing to the current ShareDesk URL.
+
+Purpose
+
+Allow users to quickly open ShareDesk on mobile devices by scanning the QR code.
+
+---
+
+## 6. Device Identification
+
+On first visit, prompt for an optional device name.
+
+Examples
+
+* Desktop
+* Office PC
+* Laptop
+* Android Phone
+* iPhone
+* Tablet
+
+The device name is stored in browser Local Storage and attached to uploads and clipboard entries.
+
+---
+
+## 7. Search
+
+Global search supporting:
+
+* Clipboard text
+* File names
+
+Search results update instantly as the user types.
+
+---
+
+## 8. Authentication
+
+### Public Mode
+
+Anyone on the LAN can access ShareDesk.
+
+### Password Mode
+
+Single shared password protects the application.
+
+Future versions may support user accounts and roles.
+
+---
+
+## 9. Settings
+
+Configurable options:
+
+* Application title
+* Port
+* Upload directory
+* Maximum upload size
+* Clipboard history limit
+* File retention period
+* Enable password protection
+* Enable QR code
+* Enable LAN-only mode
+* Theme (Light/Dark/Auto)
+
+---
+
+# User Interface
+
+Navigation
+
+* Clipboard
+* Files
+* Settings
+* About
+
+---
+
+## Clipboard Page
+
+Contains:
+
+* Clipboard input area
+* Save button
+* Copy Latest button
+* Clear button
+* Clipboard history list
+* Search bar
+
+---
+
+## Files Page
+
+Contains:
+
+* Drag & Drop upload area
+* Upload button
+* Search box
+* Recent files table
+* File previews
+
+---
+
+## Settings Page
+
+Contains:
+
+* General settings
+* Security settings
+* Storage settings
+* Appearance settings
+* About information
+
+---
+
+# REST API
+
+## Clipboard
+
+GET /api/clipboard
+
+Returns clipboard history.
+
+POST /api/clipboard
+
+Creates a new clipboard entry.
+
+PUT /api/clipboard/{id}
+
+Updates an existing entry.
+
+DELETE /api/clipboard/{id}
+
+Deletes an entry.
+
+---
+
+## Files
+
+GET /api/files
+
+Returns uploaded files.
+
+POST /api/files/upload
+
+Uploads one or more files.
+
+GET /api/files/{id}
+
+Downloads a file.
+
+DELETE /api/files/{id}
+
+Deletes a file.
+
+---
+
+# Database Schema
+
+## clipboard
+
+| Column      | Type                |
+| ----------- | ------------------- |
+| id          | Integer             |
+| text        | Text                |
+| device_name | String              |
+| pinned      | Boolean             |
+| created_at  | DateTime            |
+| updated_at  | DateTime            |
+| expires_at  | DateTime (nullable) |
+
+---
+
+## files
+
+| Column         | Type     |
+| -------------- | -------- |
+| id             | Integer  |
+| filename       | String   |
+| original_name  | String   |
+| mime_type      | String   |
+| size           | Integer  |
+| uploaded_by    | String   |
+| uploaded_at    | DateTime |
+| download_count | Integer  |
+
+---
+
+# Configuration
+
+Configuration should be stored in a single Python configuration file.
+
+Example options:
+
+* HOST
+* PORT
+* DATABASE_PATH
+* UPLOAD_FOLDER
+* MAX_UPLOAD_SIZE
+* MAX_HISTORY_ITEMS
+* PASSWORD
+* ENABLE_QR_CODE
+* LAN_ONLY
+
+---
+
+# Security
+
+* LAN-only by default
+* Optional password protection
+* File type validation
+* Maximum upload size enforcement
+* Secure filename handling
+* CSRF protection
+* Rate limiting (future)
+
+---
+
+# Deployment
+
+Requirements
+
+* Ubuntu 22.04+
+* Python 3.10+
+* Gunicorn
+* systemd
+
+Deployment should require only:
+
+1. Install Python dependencies
+2. Configure settings
+3. Start Gunicorn
+4. Enable the systemd service
+
+No Docker, Node.js, or reverse proxy should be required for basic LAN usage.
+
+---
+
+# Future Enhancements
+
+* WebSocket-based live clipboard updates
+* Image paste directly from clipboard
+* Clipboard synchronization without page refresh
+* Clipboard categories
+* Clipboard favorites
+* Clipboard import/export
+* ZIP download for multiple files
+* Folder uploads
+* Camera capture from mobile
+* OCR for uploaded images
+* Voice note uploads
+* Expiring share links
+* Internet access via Cloudflare Tunnel or Tailscale
+* User accounts and permissions
+* Desktop notifications
+* Progressive Web App (PWA)
+* Theme customization
+* API keys
+* Multi-language support
+
+---
+
+# Design Principles
+
+* Keep the application lightweight.
+* Prioritize simplicity over complexity.
+* Avoid unnecessary dependencies.
+* Ensure excellent performance on low-powered home servers.
+* Make every feature usable from a standard web browser.
+* Default to privacy and local-network operation.
+* Provide a clean, responsive interface for desktop and mobile devices.
+

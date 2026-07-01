@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %} - About{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h4><i class="bi bi-clipboard-check"></i> {{ app_title }}</h4>
+        <p class="text-body-secondary">
+          A lightweight, self-hosted shared clipboard and temporary file-sharing
+          service for devices on the same local network.
+        </p>
+        <hr>
+        <ul class="list-unstyled small text-body-secondary mb-0">
+          <li><strong>Backend:</strong> Python, Flask, SQLAlchemy, SQLite</li>
+          <li><strong>Frontend:</strong> HTML5, Bootstrap 5, Vanilla JavaScript</li>
+          <li><strong>Scope:</strong> LAN-first, no cloud sync, no accounts (v1)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

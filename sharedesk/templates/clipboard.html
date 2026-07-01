@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %} - Clipboard{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div class="card shadow-sm mb-4">
+      <div class="card-body">
+        <textarea id="clipboardInput" class="form-control mb-2" rows="4"
+          placeholder="Paste or type text, links, code, JSON, SQL, commands..."></textarea>
+        <div class="d-flex flex-wrap gap-2">
+          <button id="saveBtn" class="btn btn-primary"><i class="bi bi-save"></i> Save</button>
+          <button id="copyLatestBtn" class="btn btn-outline-secondary"><i class="bi bi-clipboard-check"></i> Copy Latest</button>
+          <button id="clearBtn" class="btn btn-outline-danger ms-auto"><i class="bi bi-trash"></i> Clear Unpinned</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex align-items-center mb-3 gap-2">
+      <input type="search" id="clipboardSearch" class="form-control" placeholder="Search clipboard history...">
+    </div>
+
+    <div id="clipboardList" class="d-flex flex-column gap-2"></div>
+    <div id="clipboardEmpty" class="text-center text-body-secondary py-5 d-none">
+      <i class="bi bi-clipboard-x fs-1"></i>
+      <p>No clipboard entries yet.</p>
+    </div>
+  </div>
+</div>
+
+<template id="clipboardItemTemplate">
+  <div class="card clipboard-item">
+    <div class="card-body">
+      <pre class="clipboard-text mb-2"></pre>
+      <div class="d-flex flex-wrap align-items-center gap-2 small text-body-secondary">
+        <span class="device-name"></span>
+        <span class="created-at"></span>
+        <span class="pinned-badge badge text-bg-warning d-none"><i class="bi bi-pin-angle-fill"></i> Pinned</span>
+        <div class="ms-auto d-flex gap-1">
+          <button class="btn btn-sm btn-outline-secondary copy-btn" title="Copy"><i class="bi bi-clipboard"></i></button>
+          <button class="btn btn-sm btn-outline-secondary edit-btn" title="Edit"><i class="bi bi-pencil"></i></button>
+          <button class="btn btn-sm btn-outline-secondary pin-btn" title="Pin/Unpin"><i class="bi bi-pin-angle"></i></button>
+          <button class="btn btn-sm btn-outline-danger delete-btn" title="Delete"><i class="bi bi-trash"></i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/clipboard.js') }}"></script>
+{% endblock %}

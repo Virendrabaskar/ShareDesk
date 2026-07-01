@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+venv/
+.venv/
+sharedesk-env/
+instance/
+uploads/*
+!uploads/.gitkeep
+*.db
+.env

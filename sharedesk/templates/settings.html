@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+{% block title %} - Settings{% endblock %}
+{% block content %}
+<div class="row">
+  <div class="col-lg-8 mx-auto">
+    <div id="settingsAlert" class="alert d-none" role="alert"></div>
+
+    <form id="settingsForm">
+      <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold"><i class="bi bi-sliders"></i> General</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Application Title</label>
+            <input type="text" class="form-control" name="app_title" value="{{ settings.app_title }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Clipboard History Limit</label>
+            <input type="number" min="10" class="form-control" name="max_history_items" value="{{ settings.max_history_items }}">
+          </div>
+          <div class="mb-0">
+            <label class="form-label">File Retention Period (days, 0 = keep forever)</label>
+            <input type="number" min="0" class="form-control" name="file_retention_days" value="{{ settings.file_retention_days }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold"><i class="bi bi-shield-lock"></i> Security</div>
+        <div class="card-body">
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" name="password_enabled" id="passwordEnabled"
+              {% if settings.password_enabled == 'true' %}checked{% endif %}>
+            <label class="form-check-label" for="passwordEnabled">Enable password protection</label>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Shared Password</label>
+            <input type="password" class="form-control" name="password" placeholder="Leave blank to keep current password">
+          </div>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" name="lan_only" id="lanOnly"
+              {% if settings.lan_only == 'true' %}checked{% endif %}>
+            <label class="form-check-label" for="lanOnly">LAN-only mode</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold"><i class="bi bi-hdd"></i> Storage</div>
+        <div class="card-body">
+          <div class="mb-0">
+            <label class="form-label">Maximum Upload Size (MB)</label>
+            <input type="number" min="1" class="form-control" name="max_upload_size_mb" value="{{ settings.max_upload_size_mb }}">
+          </div>
+        </div>
+      </div>
+
+      <div class="card shadow-sm mb-3">
+        <div class="card-header fw-semibold"><i class="bi bi-palette"></i> Appearance</div>
+        <div class="card-body">
+          <div class="mb-3">
+            <label class="form-label">Theme</label>
+            <select class="form-select" name="theme">
+              <option value="light" {% if settings.theme == 'light' %}selected{% endif %}>Light</option>
+              <option value="dark" {% if settings.theme == 'dark' %}selected{% endif %}>Dark</option>
+              <option value="auto" {% if settings.theme == 'auto' %}selected{% endif %}>Auto</option>
+            </select>
+          </div>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" name="enable_qr_code" id="enableQr"
+              {% if settings.enable_qr_code == 'true' %}checked{% endif %}>
+            <label class="form-check-label" for="enableQr">Enable QR code</label>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-body-secondary small">
+        <i class="bi bi-info-circle"></i>
+        Host, port, database path and upload directory are set in <code>config.py</code> and require an application restart.
+      </p>
+
+      <button type="submit" class="btn btn-primary"><i class="bi bi-check-lg"></i> Save Settings</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+{% endblock %}
