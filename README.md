@@ -7,6 +7,13 @@ Python + SQLite only.
 ## Quick start (development)
 
 ```bash
+./run.sh
+```
+
+This creates the `sharedesk-env` virtual environment and installs
+dependencies on first run, then starts the app. Equivalent manual steps:
+
+```bash
 python3 -m venv sharedesk-env
 source sharedesk-env/bin/activate
 pip install -r requirements.txt
