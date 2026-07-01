@@ -10,6 +10,7 @@ def _common_context():
         "app_title": Setting.get("app_title", "ShareDesk"),
         "enable_qr_code": Setting.get_bool("enable_qr_code", True),
         "theme": Setting.get("theme", "auto"),
+        "password_enabled": Setting.get_bool("password_enabled", False),
     }
 
 

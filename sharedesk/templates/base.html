@@ -52,6 +52,14 @@
           <button type="button" id="themeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle theme">
             <i class="bi bi-circle-half"></i>
           </button>
+          {% if password_enabled %}
+          <form method="post" action="{{ url_for('auth.logout') }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-sm btn-outline-secondary" title="Log out">
+              <i class="bi bi-box-arrow-right"></i>
+            </button>
+          </form>
+          {% endif %}
         </div>
       </div>
     </div>

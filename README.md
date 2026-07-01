@@ -4,14 +4,16 @@ A lightweight, self-hosted shared clipboard and temporary file-sharing service
 for devices on the same local network. Browser-based, no client installs,
 Python + SQLite only.
 
-## Quick start (development)
+## Quick start
 
 ```bash
 ./run.sh
 ```
 
 This creates the `sharedesk-env` virtual environment and installs
-dependencies on first run, then starts the app. Equivalent manual steps:
+dependencies on first run, then starts the app via Waitress (a proper
+WSGI server, not Flask's debug server), so it holds up under multiple
+LAN devices connecting at once. Equivalent manual steps:
 
 ```bash
 python3 -m venv sharedesk-env
@@ -22,7 +24,10 @@ python app.py
 
 Open `http://<this-machine-ip>:8383` from any device on the LAN.
 
-## Production
+## Running as a systemd service
+
+For always-on deployment with multi-worker concurrency, use Gunicorn
+instead:
 
 ```bash
 source sharedesk-env/bin/activate

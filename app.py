@@ -1,12 +1,14 @@
 """
 ShareDesk entrypoint.
 
-Development:
-    python app.py
+Everyday LAN use:
+    python app.py            (serves via Waitress, handles concurrent devices)
 
-Production (recommended):
+systemd / multi-worker deployment:
     gunicorn -w 2 -b 0.0.0.0:8383 app:app
 """
+
+from waitress import serve
 
 import config
 from sharedesk import create_app
@@ -14,4 +16,4 @@ from sharedesk import create_app
 app = create_app()
 
 if __name__ == "__main__":
-    app.run(host=config.HOST, port=config.PORT)
+    serve(app, host=config.HOST, port=config.PORT)
