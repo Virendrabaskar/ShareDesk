@@ -49,11 +49,23 @@ to match your deployment location first.
 
 Process-level options (require a restart) live in `config.py` or can be
 overridden with environment variables: `SHAREDESK_HOST`, `SHAREDESK_PORT`,
-`SHAREDESK_DATABASE_PATH`, `SHAREDESK_UPLOAD_FOLDER`, `SHAREDESK_SECRET_KEY`.
+`SHAREDESK_DATABASE_PATH`, `SHAREDESK_UPLOAD_FOLDER`, `SHAREDESK_SECRET_KEY`,
+`SHAREDESK_LOG_LEVEL`, `SHAREDESK_LOG_FILE`.
 
 Everything else (app title, password protection, theme, upload size limit,
 clipboard history limit, file retention, QR code toggle) is editable live
 from the **Settings** page and stored in the SQLite database.
+
+## Logging
+
+Every request (method, path, status, device name) and app lifecycle
+events are logged to stderr by default (captured automatically by
+systemd/journald when run as a service). Adjust with:
+
+```bash
+SHAREDESK_LOG_LEVEL=DEBUG                   # default: INFO
+SHAREDESK_LOG_FILE=/var/log/sharedesk.log   # optional: also log to a rotating file (5 MB, 3 backups)
+```
 
 ## Features
 

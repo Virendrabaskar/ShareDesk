@@ -23,6 +23,11 @@ UPLOAD_FOLDER = os.environ.get(
 )
 SECRET_KEY = os.environ.get("SHAREDESK_SECRET_KEY", "dev-secret-key-change-me")
 
+LOG_LEVEL = os.environ.get("SHAREDESK_LOG_LEVEL", "INFO")
+# Empty by default: logs go to stderr only. Set to a path to also log to a
+# rotating file (e.g. SHAREDESK_LOG_FILE=/var/log/sharedesk.log).
+LOG_FILE = os.environ.get("SHAREDESK_LOG_FILE", "")
+
 # --- Defaults used to seed the DB-backed Settings table ---
 DEFAULT_SETTINGS = {
     "app_title": "ShareDesk",

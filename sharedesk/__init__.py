@@ -5,6 +5,7 @@ from flask_wtf import CSRFProtect
 from flask_wtf.csrf import generate_csrf
 
 import config as app_config
+from .logging_setup import configure_logging
 from .models import db, Setting
 
 csrf = CSRFProtect()
@@ -12,6 +13,7 @@ csrf = CSRFProtect()
 
 def create_app():
     app = Flask(__name__)
+    configure_logging(app)
     app.config["SECRET_KEY"] = app_config.SECRET_KEY
     app.config["SQLALCHEMY_DATABASE_URI"] = f"sqlite:///{app_config.DATABASE_PATH}"
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
@@ -51,5 +53,11 @@ def create_app():
     from .auth import register_auth_guard
 
     register_auth_guard(app)
+
+    app.logger.info(
+        "ShareDesk ready (db=%s, uploads=%s)",
+        app_config.DATABASE_PATH,
+        app_config.UPLOAD_FOLDER,
+    )
 
     return app
