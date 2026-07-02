@@ -6,12 +6,21 @@
   <title>{{ app_title }}{% block title %}{% endblock %}</title>
   <meta name="csrf-token" content="{{ csrf_token() }}">
   <meta name="app-theme" content="{{ theme }}">
+  <meta name="device-presence" content="{{ 'true' if enable_device_presence else 'false' }}">
+  <meta name="auto-clipboard" content="{{ 'true' if enable_auto_clipboard else 'false' }}">
+  <script>
+    (function(){
+      var t=localStorage.getItem('sharedesk_theme')||'{{ theme }}';
+      if(t==='auto')t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';
+      document.documentElement.setAttribute('data-bs-theme',t);
+    })();
+  </script>
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/css/bootstrap.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap-icons/bootstrap-icons.min.css') }}">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom mb-3">
+  <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
     <div class="container-fluid">
       <a class="navbar-brand fw-semibold" href="{{ url_for('pages.clipboard_page') }}">
         <i class="bi bi-clipboard-check"></i> {{ app_title }}
@@ -65,7 +74,13 @@
     </div>
   </nav>
 
-  <div class="container-fluid pb-5">
+  {% if enable_device_presence %}
+  <div id="onlineDevicesBar" class="border-bottom px-3 py-1 bg-body-tertiary">
+    <div id="onlineDevices" class="d-flex align-items-center flex-wrap gap-2 small"></div>
+  </div>
+  {% endif %}
+
+  <div class="container-fluid pb-5 pt-3">
     <div id="globalSearchResults" class="mb-3"></div>
     {% block content %}{% endblock %}
   </div>

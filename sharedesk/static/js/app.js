@@ -46,6 +46,7 @@
       const name = input.value.trim() || "Unknown Device";
       setDeviceName(name);
       modal.hide();
+      if (devicePresenceEnabled()) startHeartbeat();
     });
   }
 
@@ -183,11 +184,144 @@
     }
   }
 
+  function startHeartbeat() {
+    const name = getDeviceName();
+    if (!name) return;
+    const beat = () => apiFetch("/api/devices/heartbeat", { method: "POST" });
+    beat();
+    setInterval(beat, 20000);
+  }
+
+  function initOnlineDevices() {
+    const container = document.getElementById("onlineDevices");
+    if (!container) return;
+
+    let _lastDevices = [];
+
+    function renderDevices(devices) {
+      const myName = getDeviceName();
+      _lastDevices = devices;
+
+      if (!devices.length) {
+        container.innerHTML = '<span class="text-body-secondary">No devices online</span>';
+        return;
+      }
+
+      const dot = `<i class="bi bi-circle-fill text-success me-1" style="font-size:.5rem;vertical-align:middle"></i>`;
+      const barWidth = container.parentElement.offsetWidth;
+      // Estimate ~120px per badge; collapse if they won't fit
+      const fitsInline = devices.length * 120 < barWidth - 120;
+
+      if (fitsInline) {
+        container.innerHTML =
+          `<span class="text-body-secondary me-1">Online:</span>` +
+          devices
+            .map(
+              (d) =>
+                `<span class="badge text-bg-success">${dot}${escapeHtml(d)}${d === myName ? " (you)" : ""}</span>`
+            )
+            .join("");
+      } else {
+        const dropId = "onlineDevicesDropdown";
+        const listHtml = devices
+          .map(
+            (d) =>
+              `<li><span class="dropdown-item-text">${dot}${escapeHtml(d)}${d === myName ? ' <span class="text-body-secondary">(you)</span>' : ""}</span></li>`
+          )
+          .join("");
+        container.innerHTML = `
+          <div class="dropdown">
+            <button class="btn btn-sm btn-outline-success dropdown-toggle py-0" type="button" id="${dropId}" data-bs-toggle="dropdown" aria-expanded="false">
+              ${dot}Devices (${devices.length})
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="${dropId}">${listHtml}</ul>
+          </div>`;
+      }
+    }
+
+    function refresh() {
+      apiFetch("/api/devices")
+        .then((r) => r.json())
+        .then(renderDevices);
+    }
+
+    // Re-render on resize so the inline/collapsed decision stays correct
+    window.addEventListener("resize", () => renderDevices(_lastDevices));
+
+    refresh();
+    setInterval(refresh, 25000);
+  }
+
+  let _lastClipboardText = null;
+
+  function autoClipboardEnabled() {
+    const meta = document.querySelector('meta[name="auto-clipboard"]');
+    return meta && meta.getAttribute("content") === "true";
+  }
+
+  function initClipboardWatcher() {
+    if (!autoClipboardEnabled()) return;
+    if (!navigator.clipboard || !navigator.clipboard.readText) return;
+    const inputEl = document.getElementById("clipboardInput");
+    if (!inputEl) return;
+
+    // Seed _lastClipboardText from the most recent saved entry so we don't
+    // re-surface content that was already saved.
+    apiFetch("/api/clipboard")
+      .then((r) => r.json())
+      .then((entries) => {
+        if (entries && entries.length) _lastClipboardText = entries[0].text;
+      })
+      .catch(() => {})
+      .finally(() => {
+        poll();
+        setInterval(poll, 3000);
+      });
+
+    async function poll() {
+      try {
+        const text = await navigator.clipboard.readText();
+        if (text && text !== _lastClipboardText) {
+          _lastClipboardText = text;
+          setTextareaFromClipboard(inputEl, text);
+        }
+      } catch {
+        // permission denied or unavailable — stop polling silently
+      }
+    }
+  }
+
+  function setTextareaFromClipboard(inputEl, text) {
+    inputEl.value = text;
+    inputEl.focus();
+
+    let note = document.getElementById("clipboardDetectNote");
+    if (!note) {
+      note = document.createElement("div");
+      note.id = "clipboardDetectNote";
+      note.className = "form-text text-info mt-1";
+      note.innerHTML = '<i class="bi bi-clipboard-plus"></i> New content detected from clipboard — edit or save above.';
+      inputEl.after(note);
+    }
+    // Auto-remove the note once the user starts typing
+    inputEl.addEventListener("input", () => note.remove(), { once: true });
+  }
+
+  function devicePresenceEnabled() {
+    const meta = document.querySelector('meta[name="device-presence"]');
+    return meta && meta.getAttribute("content") === "true";
+  }
+
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
     initDeviceNamePrompt();
     initQrModal();
     initGlobalSearch();
+    if (devicePresenceEnabled()) {
+      startHeartbeat();
+      initOnlineDevices();
+    }
+    initClipboardWatcher();
   });
 
   window.ShareDesk = {
@@ -198,5 +332,6 @@
     escapeHtml,
     timeAgo,
     formatBytes,
+    setLastClipboardText: (text) => { _lastClipboardText = text; },
   };
 })();

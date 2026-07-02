@@ -65,10 +65,20 @@
               <option value="auto" {% if settings.theme == 'auto' %}selected{% endif %}>Auto</option>
             </select>
           </div>
-          <div class="form-check form-switch mb-0">
+          <div class="form-check form-switch mb-3">
             <input class="form-check-input" type="checkbox" role="switch" name="enable_qr_code" id="enableQr"
               {% if settings.enable_qr_code == 'true' %}checked{% endif %}>
             <label class="form-check-label" for="enableQr">Enable QR code</label>
+          </div>
+          <div class="form-check form-switch mb-3">
+            <input class="form-check-input" type="checkbox" role="switch" name="enable_device_presence" id="enableDevicePresence"
+              {% if settings.enable_device_presence == 'true' %}checked{% endif %}>
+            <label class="form-check-label" for="enableDevicePresence">Show online devices <span class="text-body-secondary small">(heartbeat every 20s)</span></label>
+          </div>
+          <div class="form-check form-switch mb-0">
+            <input class="form-check-input" type="checkbox" role="switch" name="enable_auto_clipboard" id="enableAutoClipboard"
+              {% if settings.enable_auto_clipboard == 'true' %}checked{% endif %}>
+            <label class="form-check-label" for="enableAutoClipboard">Auto clipboard detection <span class="text-body-secondary small">(polls every 3s, requires clipboard permission)</span></label>
           </div>
         </div>
       </div>

@@ -12,6 +12,8 @@ EDITABLE_KEYS = {
     "password_enabled",
     "password",
     "enable_qr_code",
+    "enable_device_presence",
+    "enable_auto_clipboard",
     "lan_only",
     "theme",
 }
