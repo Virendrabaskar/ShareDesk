@@ -104,7 +104,8 @@
   }
 
   function timeAgo(isoString) {
-    const date = new Date(isoString);
+    const normalized = isoString.endsWith("Z") || isoString.includes("+") ? isoString : isoString + "Z";
+    const date = new Date(normalized);
     const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
     const steps = [
       [60, "s"],
