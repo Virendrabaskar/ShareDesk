@@ -46,10 +46,30 @@
   }
 
   function copyText(text) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => showToast("Copied to clipboard", "success"))
-      .catch(() => showToast("Copy failed - clipboard permission denied", "danger"));
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => showToast("Copied to clipboard", "success"))
+        .catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
+  }
+
+  function fallbackCopy(text) {
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.cssText = "position:fixed;top:-9999px;left:-9999px;opacity:0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      document.execCommand("copy");
+      showToast("Copied to clipboard", "success");
+    } catch {
+      showToast("Copy failed", "danger");
+    }
+    document.body.removeChild(ta);
   }
 
   function startEdit(entry) {
