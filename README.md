@@ -24,6 +24,27 @@ python app.py
 
 Open `http://<this-machine-ip>:8383` from any device on the LAN.
 
+## Screenshots
+
+<table>
+  <tr>
+    <td align="center"><b>Clipboard (desktop)</b></td>
+    <td align="center"><b>Files (desktop)</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/web-clipboard-share.png" width="400"></td>
+    <td><img src="docs/screenshots/web-file-share.png" width="400"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Clipboard (mobile)</b></td>
+    <td align="center"><b>Files (mobile)</b></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/mobile-clipboard-share.jpg" width="220"></td>
+    <td><img src="docs/screenshots/mobile-file-share.jpg" width="220"></td>
+  </tr>
+</table>
+
 ## Running as a systemd service
 
 For always-on deployment with multi-worker concurrency, use Gunicorn

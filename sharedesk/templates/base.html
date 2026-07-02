@@ -61,6 +61,9 @@
           <button type="button" id="themeToggle" class="btn btn-sm btn-outline-secondary" title="Toggle theme">
             <i class="bi bi-circle-half"></i>
           </button>
+          <button type="button" id="renameDeviceBtn" class="btn btn-sm btn-outline-secondary" title="Rename this device">
+            <i class="bi bi-laptop"></i>
+          </button>
           {% if password_enabled %}
           <form method="post" action="{{ url_for('auth.logout') }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">

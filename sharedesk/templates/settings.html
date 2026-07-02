@@ -32,14 +32,9 @@
               {% if settings.password_enabled == 'true' %}checked{% endif %}>
             <label class="form-check-label" for="passwordEnabled">Enable password protection</label>
           </div>
-          <div class="mb-3">
+          <div class="mb-0">
             <label class="form-label">Shared Password</label>
             <input type="password" class="form-control" name="password" placeholder="Leave blank to keep current password">
-          </div>
-          <div class="form-check form-switch mb-0">
-            <input class="form-check-input" type="checkbox" role="switch" name="lan_only" id="lanOnly"
-              {% if settings.lan_only == 'true' %}checked{% endif %}>
-            <label class="form-check-label" for="lanOnly">LAN-only mode</label>
           </div>
         </div>
       </div>

@@ -34,20 +34,36 @@
     localStorage.setItem("sharedesk_device_name", name);
   }
 
-  function initDeviceNamePrompt() {
-    if (getDeviceName()) return;
+  function initDeviceNameModal() {
     const modalEl = document.getElementById("deviceNameModal");
     if (!modalEl) return;
     const modal = new bootstrap.Modal(modalEl);
-    modal.show();
+    const input = document.getElementById("deviceNameInput");
+    const renameBtn = document.getElementById("renameDeviceBtn");
 
     document.getElementById("deviceNameSave").addEventListener("click", () => {
-      const input = document.getElementById("deviceNameInput");
       const name = input.value.trim() || "Unknown Device";
+      const renamed = !!getDeviceName();
       setDeviceName(name);
       modal.hide();
-      if (devicePresenceEnabled()) startHeartbeat();
+      if (renamed) {
+        showToast("Device name updated", "success");
+      } else if (devicePresenceEnabled()) {
+        startHeartbeat();
+      }
     });
+
+    if (renameBtn) {
+      renameBtn.addEventListener("click", () => {
+        input.value = getDeviceName();
+        modal.show();
+      });
+    }
+
+    if (!getDeviceName()) {
+      input.value = "";
+      modal.show();
+    }
   }
 
   function initTheme() {
@@ -314,7 +330,7 @@
 
   document.addEventListener("DOMContentLoaded", () => {
     initTheme();
-    initDeviceNamePrompt();
+    initDeviceNameModal();
     initQrModal();
     initGlobalSearch();
     if (devicePresenceEnabled()) {

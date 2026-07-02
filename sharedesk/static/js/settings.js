@@ -14,7 +14,7 @@
       payload[key] = value;
     }
     // Checkboxes are absent from FormData when unchecked.
-    ["password_enabled", "lan_only", "enable_qr_code", "enable_device_presence", "enable_auto_clipboard"].forEach((key) => {
+    ["password_enabled", "enable_qr_code", "enable_device_presence", "enable_auto_clipboard"].forEach((key) => {
       payload[key] = form.querySelector(`[name="${key}"]`).checked ? "true" : "false";
     });
 
