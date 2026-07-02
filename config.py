@@ -37,6 +37,8 @@ DEFAULT_SETTINGS = {
     "password_enabled": "false",
     "password": "",
     "enable_qr_code": "true",
+    "enable_device_presence": "false",
+    "enable_auto_clipboard": "false",
     "lan_only": "true",
     "theme": "auto",  # light | dark | auto
 }

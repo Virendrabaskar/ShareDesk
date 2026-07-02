@@ -9,6 +9,8 @@ def _common_context():
     return {
         "app_title": Setting.get("app_title", "ShareDesk"),
         "enable_qr_code": Setting.get_bool("enable_qr_code", True),
+        "enable_device_presence": Setting.get_bool("enable_device_presence", False),
+        "enable_auto_clipboard": Setting.get_bool("enable_auto_clipboard", False),
         "theme": Setting.get("theme", "auto"),
         "password_enabled": Setting.get_bool("password_enabled", False),
     }

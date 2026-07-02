@@ -41,6 +41,7 @@ def create_app():
     from .routes.settings import settings_bp
     from .routes.qrcode_route import qrcode_bp
     from .routes.search import search_bp
+    from .routes.devices import devices_bp
 
     app.register_blueprint(auth_bp)
     app.register_blueprint(pages_bp)
@@ -49,6 +50,7 @@ def create_app():
     app.register_blueprint(settings_bp)
     app.register_blueprint(qrcode_bp)
     app.register_blueprint(search_bp)
+    app.register_blueprint(devices_bp)
 
     from .auth import register_auth_guard
 

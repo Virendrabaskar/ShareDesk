@@ -1,7 +1,7 @@
 (function () {
   "use strict";
 
-  const { apiFetch, showToast, timeAgo } = window.ShareDesk;
+  const { apiFetch, showToast, timeAgo, setLastClipboardText } = window.ShareDesk;
 
   const listEl = document.getElementById("clipboardList");
   const emptyEl = document.getElementById("clipboardEmpty");
@@ -122,6 +122,9 @@
         return r.json();
       })
       .then(() => {
+        setLastClipboardText(text);
+        const note = document.getElementById("clipboardDetectNote");
+        if (note) note.remove();
         resetEditState();
         fetchEntries(searchEl.value.trim());
         showToast("Saved", "success");

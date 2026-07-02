@@ -37,3 +37,8 @@
   max-height: 60vh;
   overflow-y: auto;
 }
+
+#onlineDevicesBar {
+  min-height: 2rem;
+  line-height: 2rem;
+}
